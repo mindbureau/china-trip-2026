@@ -2,197 +2,884 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src * data: blob: 'unsafe-inline'; script-src https://cdn.jsdelivr.net/npm/mermaid@10/ 'nonce-j0NPQzrgrjplZQ9T8O1UfQ' 'unsafe-eval'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>kl-airbnb-vs-moxy — Китай 9–19 октября 2026: Пекин и Шанхай</title>
+<title>Китай 9–19 октября 2026: Пекин → Шанхай</title>
 <style>
 :root{
-  --bg:#f7f7f8; --panel:#ffffff; --fg:#1d1d1f; --muted:#6b6b70;
-  --border:#e3e3e6; --accent:#4f46e5; --accent-soft:#eef0ff;
-  --code-bg:#f4f4f6; --table-zebra:#fafafb;
+ --bg:#0f0f11; --card:#1a1a1e; --fg:#e8e8ec; --muted:#8a8a94;
+ --border:#2a2a30; --accent:#7c8aff; --accent-soft:#1e2040;
+ --gold:#f0c060; --gold-soft:rgba(240,192,96,.08);
 }
-@media (prefers-color-scheme: dark){
-  :root{
-    --bg:#161618; --panel:#1e1e21; --fg:#ececf0; --muted:#a0a0a8;
-    --border:#34343a; --accent:#a5b4fc; --accent-soft:#23233a;
-    --code-bg:#101013; --table-zebra:#202024;
-  }
-}
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{
-  margin:0; background:var(--bg); color:var(--fg);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",
-    Roboto,Helvetica,Arial,"Apple Color Emoji",sans-serif;
-  font-size:16px; line-height:1.65;
-  -webkit-font-smoothing:antialiased;
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1200px;margin:0 auto;padding:20px 20px 80px}
+h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:20px 0 6px}
+h2{font-size:20px;font-weight:650;color:var(--gold);margin:36px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sub{color:var(--muted);font-size:14px;margin-bottom:28px}
+.route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0 28px;font-size:13px;color:var(--muted)}
+.route .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.route .arr{color:var(--border);font-size:16px}
+
+/* — day card — */
+.day-card{background:var(--card);border:1px solid var(--border);border-radius:16px;margin:20px 0;overflow:hidden;transition:border-color .2s}
+.day-card:hover{border-color:var(--accent)}
+.day-head{padding:20px 24px 12px}
+.day-head h3{font-size:22px;font-weight:700;margin:0 0 4px}
+.day-head .tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-right:6px}
+.tag-must{background:#1d7a3a;color:#fff}
+.tag-near{background:#8a6d1c;color:#fff}
+.tag-bonus{background:#5a5f6b;color:#fff}
+.day-head .desc{color:var(--muted);font-size:14px;margin-top:6px;line-height:1.5}
+.day-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px 16px;padding:0 24px 16px;font-size:13px}
+.day-meta b{color:var(--gold)}
+
+.day-meta .flights{grid-column:1/-1;display:flex;flex-direction:column;gap:5px;margin:2px 0 6px}
+.day-meta .flights>div{padding:7px 10px;background:rgba(255,255,255,.03);border-left:2px solid var(--accent);border-radius:6px;line-height:1.5}
+.day-meta .flights .src-note{border-left-color:var(--border);color:var(--muted);font-size:12px;background:none}
+
+/* — gallery — */
+.gallery{display:flex;gap:6px;padding:0 12px 12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.gallery::-webkit-scrollbar{display:none}
+.gallery .g-item{flex:0 0 auto;width:260px;height:170px;border-radius:10px;overflow:hidden;scroll-snap-align:start;cursor:pointer;position:relative}
+.gallery .g-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.gallery .g-item:hover img{transform:scale(1.04)}
+.gallery .g-cap{position:absolute;bottom:0;left:0;right:0;padding:4px 8px;background:linear-gradient(transparent,rgba(0,0,0,.7));font-size:11px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* — modal — */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.active{display:flex}
+.modal-box{position:relative;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center}
+.modal-box img{max-width:90vw;max-height:85vh;border-radius:8px;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.modal-close{position:fixed;top:16px;right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:22px;cursor:pointer;z-index:101;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:rgba(255,255,255,.3)}
+.modal-nav{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:20px;cursor:pointer;z-index:101;display:flex;align-items:center;justify-content:center}
+.modal-nav:hover{background:rgba(255,255,255,.25)}
+.modal-nav.prev{left:12px}
+.modal-nav.next{right:12px}
+.modal-counter{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.6);font-size:13px;z-index:101}
+
+/* — график нагрузки — */
+.load-chart{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px 16px;margin:16px 0 28px;overflow-x:auto}
+.load-legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:14px;font-size:12px;color:var(--muted)}
+.load-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.load-note{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.6}
+.load-note b{color:var(--gold)}
+.tailor-box{background:#191920;border:1px solid #2f2f38;border-radius:12px;padding:16px 18px;margin:14px 0}
+.tailor-box h4{margin:0 0 8px;color:var(--gold);font-size:15px}
+.tailor-intro{color:#a8a8b2;font-size:13.5px;margin:0 0 12px;line-height:1.55}
+.tailor-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.tailor-table th{text-align:left;color:#8a8a94;font-weight:600;padding:7px 8px;border-bottom:1px solid #2f2f38}
+.tailor-table td{padding:8px;border-bottom:1px solid #24242b;color:#d8d8e0;vertical-align:top}
+.tailor-table td.ok{color:#6fc98a}
+.tailor-table td.warn{color:#f0c060}
+.tailor-table td.no{color:#e0776c}
+.tailor-warn{color:#c8c8d2;font-size:13px;line-height:1.6;margin:10px 0 0;padding:11px 13px;background:#14141a;border-left:3px solid var(--gold);border-radius:0 6px 6px 0}
+.tailor-warn b{color:var(--gold)}
+.hotel-box{background:#1c1c22;border:1px solid #2a2a30;border-radius:12px;padding:18px 20px;margin:14px 0}
+.hotel-row{padding:12px 0;border-bottom:1px solid #2a2a30}
+.hotel-row:last-of-type{border-bottom:none}
+.hotel-head b{color:#e8e8ec;font-size:15px}
+.hotel-meta{color:#8a8a94;font-size:12.5px;margin-left:6px}
+.hotel-note{color:#a8a8b2;font-size:13px;margin:5px 0 7px}
+.hotel-links a{color:#7c8aff;font-size:13px}
+.load-legend .hatch-sw{display:inline-block;width:14px;height:11px;margin-right:6px;vertical-align:-1px;background:repeating-linear-gradient(45deg,#8a8a94 0 2px,#3a3a42 2px 5px);border:1px solid #8a8a94;border-radius:2px}
+
+/* — budget table — */
+.budget-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+.budget-table th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--gold);color:var(--gold);font-weight:600}
+.budget-table td{padding:8px 14px;border-bottom:1px solid var(--border)}
+.budget-table tr:hover{background:rgba(124,138,255,.05)}
+.budget-table .total td{border-top:2px solid var(--gold);font-weight:700;font-size:16px;color:var(--gold);padding-top:14px}
+
+/* — verdict — */
+.verdict{border:1px solid var(--gold);border-radius:14px;padding:18px 22px;margin-top:32px;background:var(--gold-soft)}
+.verdict b{color:var(--gold)}
+.mini{font-size:12px;color:var(--muted);margin-top:8px}
+.src{font-size:12px;color:var(--muted);margin-top:24px;line-height:1.7}
+.src a{color:var(--accent);text-decoration:none}
+.src a:hover{text-decoration:underline}
+@media(max-width:600px){
+ .gallery .g-item{width:200px;height:130px}
+ .day-meta{grid-template-columns:1fr 1fr}
+ .budget-table{font-size:12px}
+ .budget-table th,.budget-table td{padding:6px 8px}
 }
-.wrap{max-width:1760px; margin:0 auto; padding:0 20px 96px}
-header.report-head{
-  position:sticky; top:0; z-index:5;
-  background:color-mix(in srgb, var(--bg) 86%, transparent);
-  backdrop-filter:saturate(1.4) blur(8px);
-  border-bottom:1px solid var(--border);
-  margin-bottom:32px;
-}
-header.report-head .inner{
-  max-width:1760px; margin:0 auto; padding:14px 20px;
-  display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
-}
-header.report-head h1.doc-title{
-  font-size:18px; margin:0; font-weight:650; letter-spacing:-.01em;
-}
-header.report-head .meta{font-size:12.5px; color:var(--muted); margin-left:auto}
-article{
-  background:var(--panel); border:1px solid var(--border);
-  border-radius:14px; padding:36px 40px;
-  box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 30px rgba(0,0,0,.05);
-}
-article>:first-child{margin-top:0}
-article>:last-child{margin-bottom:0}
-h1,h2,h3,h4{line-height:1.25; letter-spacing:-.015em; margin:1.8em 0 .6em}
-h1{font-size:1.9em; font-weight:720}
-h2{font-size:1.45em; font-weight:680; padding-bottom:.25em;
-   border-bottom:1px solid var(--border)}
-h3{font-size:1.18em; font-weight:660}
-h4{font-size:1.02em; font-weight:640; color:var(--muted)}
-p{margin:.7em 0}
-a{color:var(--accent); text-decoration:none}
-a:hover{text-decoration:underline}
-ul,ol{padding-left:1.5em; margin:.6em 0}
-li{margin:.25em 0}
-strong{font-weight:660}
-hr{border:0; border-top:1px solid var(--border); margin:2em 0}
-blockquote{
-  margin:1em 0; padding:.4em 1.1em; color:var(--muted);
-  border-left:3px solid var(--accent); background:var(--accent-soft);
-  border-radius:0 8px 8px 0;
-}
-blockquote p{margin:.3em 0}
-code{
-  font-family:"SF Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  font-size:.88em; background:var(--code-bg); padding:.15em .4em;
-  border-radius:5px; border:1px solid var(--border);
-}
-pre{
-  background:var(--code-bg); border:1px solid var(--border);
-  border-radius:10px; padding:14px 16px; overflow:auto; margin:1em 0;
-}
-pre code{background:none; border:0; padding:0; font-size:.86em; line-height:1.5}
-.codehilite{
-  background:var(--code-bg); border:1px solid var(--border);
-  border-radius:10px; margin:1em 0; overflow:auto;
-}
-.codehilite pre{border:0; margin:0; border-radius:0; background:none}
-table{
-  border-collapse:collapse; width:100%; margin:1.1em 0; font-size:.93em;
-  display:block; overflow-x:auto;
-}
-th,td{border:1px solid var(--border); padding:8px 12px; text-align:left;
-  vertical-align:top}
-thead th{background:var(--accent-soft); font-weight:640}
-tbody tr:nth-child(even){background:var(--table-zebra)}
-img{max-width:100%; border-radius:8px}
-.admonition{
-  border:1px solid var(--border); border-left:4px solid var(--accent);
-  background:var(--accent-soft); border-radius:0 10px 10px 0;
-  padding:.6em 1em; margin:1em 0;
-}
-.admonition-title{font-weight:680; margin:.1em 0 .3em}
-footer.report-foot{
-  max-width:1760px; margin:28px auto 0; padding:0 20px;
-  color:var(--muted); font-size:12px; text-align:center;
-}
-@media print{
-  header.report-head{position:static; backdrop-filter:none}
-  article{box-shadow:none; border:0; padding:0}
-  body{background:#fff}
-}
-header.report-head .inner{align-items:center}
-.head-main{display:flex; flex-direction:column; gap:3px; min-width:0}
-.project{
-  font-size:11.5px; font-weight:750; letter-spacing:.06em; text-transform:uppercase;
-  color:var(--accent); display:inline-flex; align-items:center; gap:6px;
-  max-width:60ch; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.project::before{content:"📁"; font-size:12px}
-header.report-head .meta{
-  display:flex; flex-direction:column; align-items:flex-end; gap:1px;
-  line-height:1.4; margin-left:auto;
-}
-.meta .proj-path{font-size:11px; opacity:.8; max-width:48ch;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-pre.mermaid{background:none; border:0; padding:0; margin:1.2em 0;
-  text-align:center; overflow:auto}
-pre.mermaid svg{max-width:100%; height:auto}
 </style>
 </head>
 <body>
-<header class="report-head"><div class="inner">
-<div class="head-main">
-<div class="project">kl-airbnb-vs-moxy</div>
-<h1 class="doc-title">Китай 9–19 октября 2026: Пекин и Шанхай</h1>
-</div>
-<span class="meta"><span>2026-10-08 13:15</span></span>
-</div></header>
-<div class="wrap"><article>
-<pre># Китай, 9–19 октября 2026: Пекин и Шанхай
+<div class="wrap">
 
-Проработка китайской части поездки: программа, отели, логистика, брони, смета, практика, расширения, открытые вопросы. Состояние на 08.10.2026 — заезд завтра. Файлы: `cities/china/01-plan.md` … `09-open-questions.md`, `work/attractions.json`.
+<h1>🌴 КЛ → 🇨🇳 Китай → ✈️ Черногория</h1>
+<p class="sub">9–19 октября 2026. Пекин (5 ночей) → Шанхай (5 ночей) → Стамбул → Черногория. Состояние на 8 октября: заезд завтра. Вылет из КЛ 9 октября через Гуанчжоу (было 10-е напрямую в первой проработке). Безвиз Китай 30 дней для россиян (продлён до 31.12.2027), безвиз Малайзия 30 дней + обязательная MDAC. Все фото кликабельны.</p>
 
-## 1. Программа
-
-- 9 окт: прилёт в Дасин 23:10 (CZ350 + CZ3161), такси в отель, заезд ~01:00.
-- 10 окт (2–4): буфер, хутуны, Юнхэгун после обеда.
-- 11 окт (7): Гугун + Цзиньшань (2 CNY в октябре).
-- 12 окт (6): Стена Мутяньюй, выезд 7:00.
-- 13 окт (4): Храм Неба + Тяньаньмэнь + утка.
-- 14 окт (5): поезд G ~10:30 в Шанхай, вечером Бунд.
-- 15 окт (2–4): OFF, Французский квартал.
-- 16 окт (2–8): Сучжоу (сад 80 CNY) или резерв.
-- 17 окт (8): пик — Юйюань + Нанкинская улица.
-- 18 окт (5–10): шопинг/резерв/Дисней по силам.
-- 19 окт (7): вылет в Тиват (утро или вечер).
-- Детали — `02-itinerary.md`.
-
-## 2. Отели (живой снимок Booking 08.10.2026)
-
-- Пекин: Beijing Hyde Courtyard €237/5 ночей, бесплатная отмена — первый выбор; остаток «We have 1 left», решать сегодня. Запасной — RJ Brown от €237, но только невозвратные тарифы.
-- Шанхай: Xihe Hotel Jiuyuan Xietu Road €253 (+€3 к лимиту) с полной отменой — первый выбор. Fish Inn €260/€290 выше лимита; Jinglai €228 — номер без окна.
-- Ночной заезд ~01:00 за пределами окна 14:00–00:00: написать отелю заранее. Детали — `03-hotels.md`.
-
-## 3. Логистика
-
-- CZ350 14:00→18:10 + CZ3161 20:00→23:10: оба ежедневные, подтверждены на Flightradar24 08.10.2026. Цена живьём не проверена (Google Flights без JS-рендера).
-- Поезд G Пекин Южный → Шанхай Хунцяо ~10:30, 4,5 ч: G-номера и цены 2-го класса — `04-logistics.md`.
-- Дасин → центр ночью: такси/Didi €28–36, 60–90 мин. Хунцяо → центр: метро 2/10, 40–50 мин. В Пудун: метро 2 (€0,90–1,30) или Didi €20–30.
-- Окно продаж 12306 — 15 дней (разрешено в пользу Trip.com 08.10 против «30 дней» в плане 15.09).
-
-## 4. Брони
-
-Три окна Гугуна (4, 6, 7 окт) уже прошли — проверить наличие билетов сегодня. Тяньаньмэнь (окно 1–7 дней, WeChat), Мутяньюй (можно накануне), Юнхэгун (за 7 дней). Календарь попыток — `05-bookings-calendar.md`.
-
-## 5. Смета
-
-Китайская часть, 1 человек: курс 1 CNY = €0,1331 (open.er-api.com, 08.10.2026). Три колонки минимум/ожидаемо/максимум + разбивка по дням — `06-budget.md`.
-
-## 6. Практика
-
-Безвиз РФ 30 дней до 31.12.2027. Alipay + WeChat Pay настроить до вылета (привязка Visa/MC, паспорт). VPN (Outline/Amnezia) и eSIM Malaysia+China — до вылета. Фактический прогноз Open-Meteo на 9–19 окт (снят 08.10) — `07-practical.md`.
-
-## 7. Расширения
-
-Сиань, Чэнду/Чунцин, Ханчжоу, Гуйлинь — разбор с ценой выбора в `08-options.md`. Хуаншань и Чжанцзяцзе не возвращать (причина 17.09 действует). Сучжоу 16 окт: полный день или резерв.
-
-## 8. Что решить сегодня
-
-1. Отель Пекина (остаток 1 номер) + сообщение про заезд ~01:00.
-2. Проверить билеты Гугуна на 11/13 окт и Тяньаньмэнь на 13-е.
-3. Отель Шанхая (принять +€3 или искать).
-4. Купить eSIM, настроить VPN, привязать карту в Alipay.
-Полный список — `09-open-questions.md`.
-</pre>
-</article>
+<div class="route">
+<span class="dot"></span> Шри-Ланка (до 4 окт)
+<span class="arr">✈</span>
+<span class="dot"></span> Куала-Лумпур (5 ночей)
+<span class="arr">✈</span>
+<span class="dot"></span> Пекин (5 ночей)
+<span class="arr">🚄</span>
+<span class="dot"></span> Шанхай (5 ночей)
+<span class="arr">✈</span>
+<span class="dot"></span> Стамбул
+<span class="arr">✈</span>
+<span class="dot"></span> Черногория
 </div>
 
+<h2>📊 Нагрузка по дням</h2>
+<div class="load-chart">
+<svg viewBox="0 0 1160 410" width="100%" role="img" aria-label="График нагрузки по дням" style="display:block">
+<defs>
+<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".10"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+<pattern id="hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#8a8a94" opacity=".22"/><line x1="0" y1="0" x2="0" y2="7" stroke="#e8e8ec" stroke-width="2.4" opacity=".55"/></pattern>
+</defs>
+<line x1="54" y1="258.0" x2="1142" y2="258.0" stroke="#2a2a30" stroke-width="1"/>
+<text x="44" y="262.0" fill="#8a8a94" font-size="11" text-anchor="end">2</text>
+<line x1="54" y1="202.0" x2="1142" y2="202.0" stroke="#2a2a30" stroke-width="1"/>
+<text x="44" y="206.0" fill="#8a8a94" font-size="11" text-anchor="end">4</text>
+<line x1="54" y1="146.0" x2="1142" y2="146.0" stroke="#2a2a30" stroke-width="1"/>
+<text x="44" y="150.0" fill="#8a8a94" font-size="11" text-anchor="end">6</text>
+<line x1="54" y1="90.0" x2="1142" y2="90.0" stroke="#2a2a30" stroke-width="1"/>
+<text x="44" y="94.0" fill="#8a8a94" font-size="11" text-anchor="end">8</text>
+<line x1="54" y1="34.0" x2="1142" y2="34.0" stroke="#2a2a30" stroke-width="1"/>
+<text x="44" y="38.0" fill="#8a8a94" font-size="11" text-anchor="end">10</text>
+<line x1="54" y1="160.0" x2="1142" y2="160.0" stroke="#7c8aff" stroke-width="1.4" stroke-dasharray="6 5"/>
+<text x="60" y="153.0" fill="#7c8aff" font-size="11" text-anchor="start">средняя нагрузка 5.5</text>
+<rect x="66.9" y="174.0" width="42.2" height="140.0" rx="5" fill="#f0c060" opacity=".92"><title>4 окт (вс) — нагрузка 5/10, ~3k шагов: Коломбо → КЛ, прилёт днём</title></rect>
+<rect x="66.9" y="174.0" width="42.2" height="140.0" rx="5" fill="url(#fade)"/>
+<text x="88.0" y="166.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">5</text>
+<text x="88.0" y="148.0" font-size="14" text-anchor="middle">✈</text>
+<text x="88.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">4</text>
+<text x="88.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">вс</text>
+<text x="88.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">3k</text>
+<rect x="134.9" y="174.0" width="42.2" height="140.0" rx="5" fill="#f0c060" opacity=".92"><title>5 окт (пн) — нагрузка 5/10, ~4k шагов: Бату-Кейвз, 272 ступени</title></rect>
+<rect x="134.9" y="174.0" width="42.2" height="140.0" rx="5" fill="url(#fade)"/>
+<text x="156.0" y="166.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">5</text>
+<text x="156.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">5</text>
+<text x="156.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">пн</text>
+<text x="156.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">4k</text>
+<rect x="202.9" y="174.0" width="42.2" height="140.0" rx="5" fill="#f0c060" opacity=".92"><title>6 окт (вт) — нагрузка 5/10, ~5k шагов: Петронас + KLCC</title></rect>
+<rect x="202.9" y="174.0" width="42.2" height="140.0" rx="5" fill="url(#fade)"/>
+<text x="224.0" y="166.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">5</text>
+<text x="224.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">6</text>
+<text x="224.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">вт</text>
+<text x="224.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">5k</text>
+<rect x="270.9" y="146.0" width="42.2" height="168.0" rx="5" fill="#f0c060" opacity=".92"><title>7 окт (ср) — нагрузка 6/10, ~6k шагов: Чайнатаун пешком</title></rect>
+<rect x="270.9" y="146.0" width="42.2" height="168.0" rx="5" fill="url(#fade)"/>
+<text x="292.0" y="138.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">6</text>
+<text x="292.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">7</text>
+<text x="292.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">ср</text>
+<text x="292.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">6k</text>
+<rect x="338.9" y="174.0" width="42.2" height="140.0" rx="5" fill="#f0c060" opacity=".92"><title>8 окт (чт) — нагрузка 5/10, ~5k шагов: Озёра + музей</title></rect>
+<rect x="338.9" y="174.0" width="42.2" height="140.0" rx="5" fill="url(#fade)"/>
+<text x="360.0" y="166.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">5</text>
+<text x="360.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">8</text>
+<text x="360.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">чт</text>
+<text x="360.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">5k</text>
+<rect x="406.9" y="118.0" width="42.2" height="196.0" rx="5" fill="#f0c060" opacity=".92"><title>9 окт (пт) — нагрузка 7/10, ~3k шагов: КЛ → Пекин через Гуанчжоу (CZ350 14:00→18:10, стыковка 1ч50мин, CZ3161 20:00→23:10), прилёт в Дасин (PKX) 23:10 — такси до центра 60-90 мин</title></rect>
+<rect x="406.9" y="118.0" width="42.2" height="196.0" rx="5" fill="url(#fade)"/>
+<text x="428.0" y="110.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">7</text>
+<text x="428.0" y="92.0" font-size="14" text-anchor="middle">✈</text>
+<text x="428.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">9</text>
+<text x="428.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">пт</text>
+<text x="428.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">3k</text>
+<rect x="474.9" y="258.0" width="42.2" height="56.0" rx="5" fill="#3a9d5c" opacity=".92"><title>10 окт (сб) — можно от 2 до 4/10, ~2-6k шагов: Пекин, день OFF после долгого перелёта — буфер перед Гугуном</title></rect>
+<rect x="474.9" y="202.0" width="42.2" height="56.0" rx="4" fill="url(#hatch)" stroke="#8a8a94" stroke-width="1" stroke-dasharray="2 2"><title>10 окт (сб) — можно от 2 до 4/10, ~2-6k шагов: Пекин, день OFF после долгого перелёта — буфер перед Гугуном</title></rect>
+<rect x="474.9" y="258.0" width="42.2" height="56.0" rx="5" fill="url(#fade)"/>
+<text x="496.0" y="194.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">2–4</text>
+<text x="496.0" y="176.0" font-size="14" text-anchor="middle">🎚</text>
+<text x="496.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">10</text>
+<text x="496.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">сб</text>
+<text x="496.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">2-6k</text>
+<rect x="542.9" y="118.0" width="42.2" height="196.0" rx="5" fill="#f0c060" opacity=".92"><title>11 окт (вс) — нагрузка 7/10, ~6k шагов: Гугун + Угольный холм</title></rect>
+<rect x="542.9" y="118.0" width="42.2" height="196.0" rx="5" fill="url(#fade)"/>
+<text x="564.0" y="110.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">7</text>
+<text x="564.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">11</text>
+<text x="564.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">вс</text>
+<text x="564.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">6k</text>
+<rect x="610.9" y="146.0" width="42.2" height="168.0" rx="5" fill="#f0c060" opacity=".92"><title>12 окт (пн) — нагрузка 6/10, ~3k шагов: Стена Мутяньюй: выезд 7:00, 3ч дороги — работает ежедневно, понедельник не помеха</title></rect>
+<rect x="610.9" y="146.0" width="42.2" height="168.0" rx="5" fill="url(#fade)"/>
+<text x="632.0" y="138.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">6</text>
+<text x="632.0" y="120.0" font-size="14" text-anchor="middle">🚌</text>
+<text x="632.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">12</text>
+<text x="632.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">пн</text>
+<text x="632.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">3k</text>
+<rect x="678.9" y="202.0" width="42.2" height="112.0" rx="5" fill="#3a9d5c" opacity=".92"><title>13 окт (вт) — нагрузка 4/10, ~4k шагов: Храм Неба + Тяньаньмэнь, лёгкий перед поездом</title></rect>
+<rect x="678.9" y="202.0" width="42.2" height="112.0" rx="5" fill="url(#fade)"/>
+<text x="700.0" y="194.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">4</text>
+<text x="700.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">13</text>
+<text x="700.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">вт</text>
+<text x="700.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">4k</text>
+<rect x="746.9" y="174.0" width="42.2" height="140.0" rx="5" fill="#f0c060" opacity=".92"><title>14 окт (ср) — нагрузка 5/10, ~3k шагов: Пекин → Шанхай, поезд 4.5ч, вечером Бунд</title></rect>
+<rect x="746.9" y="174.0" width="42.2" height="140.0" rx="5" fill="url(#fade)"/>
+<text x="768.0" y="166.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">5</text>
+<text x="768.0" y="148.0" font-size="14" text-anchor="middle">🚄</text>
+<text x="768.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">14</text>
+<text x="768.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">ср</text>
+<text x="768.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">3k</text>
+<rect x="814.9" y="258.0" width="42.2" height="56.0" rx="5" fill="#3a9d5c" opacity=".92"><title>15 окт (чт) — можно от 2 до 4/10, ~1-6k шагов: День OFF после переезда: ничего или Французский квартал</title></rect>
+<rect x="814.9" y="202.0" width="42.2" height="56.0" rx="4" fill="url(#hatch)" stroke="#8a8a94" stroke-width="1" stroke-dasharray="2 2"><title>15 окт (чт) — можно от 2 до 4/10, ~1-6k шагов: День OFF после переезда: ничего или Французский квартал</title></rect>
+<rect x="814.9" y="258.0" width="42.2" height="56.0" rx="5" fill="url(#fade)"/>
+<text x="836.0" y="194.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">2–4</text>
+<text x="836.0" y="176.0" font-size="14" text-anchor="middle">🎚</text>
+<text x="836.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">15</text>
+<text x="836.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">чт</text>
+<text x="836.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">1-6k</text>
+<rect x="882.9" y="258.0" width="42.2" height="56.0" rx="5" fill="#3a9d5c" opacity=".92"><title>16 окт (пт) — можно от 2 до 8/10, ~2-8k шагов: свободный день или однодневка в Сучжоу (освободившаяся ночь Шанхая)</title></rect>
+<rect x="882.9" y="90.0" width="42.2" height="168.0" rx="4" fill="url(#hatch)" stroke="#8a8a94" stroke-width="1" stroke-dasharray="2 2"><title>16 окт (пт) — можно от 2 до 8/10, ~2-8k шагов: свободный день или однодневка в Сучжоу (освободившаяся ночь Шанхая)</title></rect>
+<rect x="882.9" y="258.0" width="42.2" height="56.0" rx="5" fill="url(#fade)"/>
+<text x="904.0" y="82.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">2–8</text>
+<text x="904.0" y="64.0" font-size="14" text-anchor="middle">🎚</text>
+<text x="904.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">16</text>
+<text x="904.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">пт</text>
+<text x="904.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">2-8k</text>
+<rect x="950.9" y="90.0" width="42.2" height="224.0" rx="5" fill="#e05a4f" opacity=".92"><title>17 окт (сб) — нагрузка 8/10, ~8k шагов: Шанхай: Юйюань + базар + Нанкинская</title></rect>
+<rect x="950.9" y="90.0" width="42.2" height="224.0" rx="5" fill="url(#fade)"/>
+<text x="972.0" y="82.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">8</text>
+<text x="972.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">17</text>
+<text x="972.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">сб</text>
+<text x="972.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">8k</text>
+<rect x="1018.9" y="174.0" width="42.2" height="140.0" rx="5" fill="#f0c060" opacity=".92"><title>18 окт (вс) — можно от 5 до 10/10, ~5-15k шагов: Шопинг + резерв: Сучжоу / вода / Дисней</title></rect>
+<rect x="1018.9" y="34.0" width="42.2" height="140.0" rx="4" fill="url(#hatch)" stroke="#8a8a94" stroke-width="1" stroke-dasharray="2 2"><title>18 окт (вс) — можно от 5 до 10/10, ~5-15k шагов: Шопинг + резерв: Сучжоу / вода / Дисней</title></rect>
+<rect x="1018.9" y="174.0" width="42.2" height="140.0" rx="5" fill="url(#fade)"/>
+<text x="1040.0" y="26.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">5–10</text>
+<text x="1040.0" y="8.0" font-size="14" text-anchor="middle">🎚</text>
+<text x="1040.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">18</text>
+<text x="1040.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">вс</text>
+<text x="1040.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">5-15k</text>
+<rect x="1086.9" y="118.0" width="42.2" height="196.0" rx="5" fill="#f0c060" opacity=".92"><title>19 окт (пн) — нагрузка 7/10, ~3k шагов: Шанхай → Тиват, 15ч 50мин</title></rect>
+<rect x="1086.9" y="118.0" width="42.2" height="196.0" rx="5" fill="url(#fade)"/>
+<text x="1108.0" y="110.0" fill="#e8e8ec" font-size="13" font-weight="700" text-anchor="middle">7</text>
+<text x="1108.0" y="92.0" font-size="14" text-anchor="middle">✈</text>
+<text x="1108.0" y="332.0" fill="#e8e8ec" font-size="12" font-weight="600" text-anchor="middle">19</text>
+<text x="1108.0" y="347.0" fill="#8a8a94" font-size="10.5" text-anchor="middle">пн</text>
+<text x="1108.0" y="364.0" fill="#6d6d77" font-size="9.5" text-anchor="middle">3k</text>
+<line x1="54" y1="314.0" x2="1142" y2="314.0" stroke="#3a3a42" stroke-width="1"/>
+<text x="54" y="20" fill="#8a8a94" font-size="11">нагрузка 1–10 · штрих поверх столбика — то, что можно взять сверху, а можно и не брать · под датой — шаги за день</text>
+</svg>
+<div class="load-legend">
+<span><i style="background:#3a9d5c"></i> 1–4 — отдых, можно ничего не делать</span>
+<span><i style="background:#f0c060"></i> 5–7 — обычный день туриста</span>
+<span><i style="background:#e05a4f"></i> 8–10 — тяжёлый: ранний подъём, горы или долгий переезд</span>
+<span><i class="hatch-sw"></i> штрих — опциональная часть дня, сходить или пропустить</span>
+<span>✈ 🚄 🚌 — день с переездом · 🎚 — день с полностью свободным выбором нагрузки</span>
+</div>
+<p class="load-note"><b>Как считалось:</b> шаги за день + надбавка за переезд (перелёт, поезд, дальняя поездка) + надбавка за ранний подъём. Для дней с 🎚 нижняя граница — это буквально «остался в отеле», верхняя — если сделать всё по программе. Наведи курсор на столбик — покажет расшифровку.
+<br><b>Главное правило этой раскладки — ни одного тяжёлого дня подряд.</b> Проверь по столбикам: после перелёта 9-го (7) идёт намеренно пустой буферный день 10-го (2-4); после Гугуна 11-го (7) — Стена только 12-го, а между ними ни одного дня не пропущено, потому что Стена не такая тяжёлая, как Гугун (6 против 7), и открыта ежедневно; после неё — лёгкий день Храма Неба 13-го (4) и переезд в Шанхай 14-го (5); после самого тяжёлого дня Шанхая 17-го (8) — выходной 15-го уже был, так что резервный день 16-го (Сучжоу или отдых) стоит перед пиковой нагрузкой, а не после неё.
+<br><b>Почему Гугун не в день прилёта:</b> прилёт в Пекин 9 октября вечером (ориентировочно ~23:00) — вставать в 7:00 на следующее утро ради Запретного города — это два тяжёлых дня подряд в самом начале поездки. Поэтому 10-е — буферный день, а Гугун переезжает на 11-е.
+<br><b>Дни, где можно вообще ничего не делать:</b> 10 октября в Пекине (буфер после перелёта), 15 октября в Шанхае (после поезда), 16 октября в Шанхае (резерв/Сучжоу). Плюс 18-е — свободный резерв: от «собрать чемодан» до Диснея.
+<br><b>Гор в маршруте нет — намеренно:</b> Хуаншань убран целиком, вместе с подъёмом в 6:00, ночью на вершине и двумя лишними переездами.
+<br><b>Перед вылетом:</b> 19 октября — 15ч 50мин до Тивата. Если 18-го взять Дисней (10/10, 15 000 шагов), к дороге подойдёшь выжатым.</p>
+</div>
+
+<!-- ═══ КУАЛА-ЛУМПУР ═══ -->
+<h2>🇲🇾 Куала-Лумпур — 5 ночей (4–9 октября)</h2>
+<p style="color:var(--muted);font-size:14px;margin-bottom:16px">Из Шри-Ланки 4 октября. Перелёт ~3.5ч, AirAsia / SriLankan. Виза не нужна (безвиз 30 дней), но <b>MDAC — цифровая карта прибытия — обязательна</b>: заполняется бесплатно на imigresen-online.imi.gov.my не раньше чем за 3 дня до прилёта. Перед Китаем — 5 ночей отдыха.</p>
+
+<div class="day-card">
+<div class="day-head">
+<h3>✈️ День KL1 — 4 октября (вс) — Шри-Ланка → Куала-Лумпур</h3>
+<span class="tag tag-near">лёгкий день</span>
+<div class="desc">Вылет из Коломбо (CMB), в пути 3ч 40мин - 3ч 50мин (разница +2:30). Дневных рейса три: UL314 07:40→14:00 (€231), AK44 10:40→16:55 (€153) и MH496 11:20→17:35 (€285) — все дают вечер в КЛ. Остальные ночные, прилёт под утро. Заезд в отель, Букит Бинтанг, стритфуд на Jalan Alor.</div>
+</div>
+<div class="day-meta">
+<div class="flights">
+<div><b>✈️ AK44 (AirAsia)</b> 10:40 → 16:55, KLIA2 — <b>€153</b> · лучшая цена среди дневных</div>
+<div><b>✈️ UL314 (SriLankan)</b> 07:40 → 14:00, T1 — <b>€231</b> · прилёт раньше всех, весь вечер свободен</div>
+<div><b>✈️ MH496 (Malaysia)</b> 11:20 → 17:35, T1 — <b>€285</b></div>
+<div><b>✈️ AK46 (AirAsia)</b> 22:55 → 05:05+1, KLIA2 — <b>€153</b> · прилёт под утро</div>
+<div><b>✈️ UL318 (SriLankan)</b> 01:00 → 07:20, T1 — <b>€248</b></div>
+<div><b>✈️ MH178 (Malaysia)</b> 00:05 → 06:20, T1 — <b>€396</b></div>
+<div><b>✈️ OD298 (Batik Air)</b> 21:45 → 04:05+1 — в выдаче Google Flights на эту дату не появился, смотреть на сайте Batik</div>
+<div class="src-note">Цены: Google Flights, вылет 4 октября 2026, эконом, 1 взрослый; проверено 14.09.2026</div>
+</div>
+<b>Отель:</b> Куала-Лумпур, 5 ночей (4–9 октября) — конкретные варианты с живыми ценами в разделе «Отели» внизу
+<b>Вечер:</b> Букит Бинтанг — стритфуд, ночные рынки Jalan Alor
+<b>Еда:</b> €10-15 (стритфуд дешёвый: nasi lemak €2, roti canai €1)
+<b>Транспорт:</b> аэропорт → KL Sentral KLIA Express €10 (30мин), затем метро €0.50
+<b>🚶 ~3,000 шагов</b> (лайтовая прогулка)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/db/Jalan_Alor_-_Kuala_Lumpur.jpg/960px-Jalan_Alor_-_Kuala_Lumpur.jpg" alt="Jalan Alor"><div class="g-cap">Стритфуд на Jalan Alor</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/58_Kuala_Lumpur_night_skyline_with_Mont_Kiara.jpg/960px-58_Kuala_Lumpur_night_skyline_with_Mont_Kiara.jpg" alt="Скайлайн ночью"><div class="g-cap">КЛ ночью из окна отеля</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Petronas_Towers_at_Night_-_from_the_base_upwards.jpg/960px-Petronas_Towers_at_Night_-_from_the_base_upwards.jpg" alt="Петронас"><div class="g-cap">Петронас Тауэрс — вид снизу</div></div>
+</div>
+</div>
+
+<div class="day-card">
+<div class="day-head">
+<h3>🐒 День KL2 — 5 октября (пн) — Бату Кейвз</h3>
+<span class="tag tag-must">must</span>
+<div class="desc">Индуистский храм в пещере + 272 ступени вверх к пещере. 42 метра золотая статуя Мургана. Обезьяны внизу. Утром, пока жарко.</div>
+</div>
+<div class="day-meta">
+<b>Вход:</b> бесплатно (пещера), храм внутри тоже бесплатно
+<b>Время:</b> 2-3 часа (с подъёмом по ступенькам)
+<b>🚇 Метро:</b> KTM Komuter до Batu Caves (€0.80, 30мин от KL Sentral)
+<b>Совет:</b> идти утром (7:00-9:00), пока нет жары и толпы. Обезьяны воруют — прячьте еду
+<b>🚶 ~4,000 шагов</b> (272 ступени + осмотр храма)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Gombak_Selangor_Batu-Caves-01.jpg/960px-Gombak_Selangor_Batu-Caves-01.jpg" alt="Бату Кейвз"><div class="g-cap">272 ступени к пещере</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Batu_Caves%2C_Kuala_Lumpur_03.jpg/960px-Batu_Caves%2C_Kuala_Lumpur_03.jpg" alt="Статуя"><div class="g-cap">Золотая статуя Мургана 42м</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Batu_3.jpg/960px-Batu_3.jpg" alt="Внутри пещеры"><div class="g-cap">Внутри пещеры — храм</div></div>
+</div>
+</div>
+
+<div class="day-card">
+<div class="day-head">
+<h3>🏙️ День KL3 — 6 октября (вт) — Петронас + KLCC</h3>
+<span class="tag tag-must">must</span>
+<div class="desc">Петронас Тауэрс — два небоскрёба 452м, мост между ними на 41 этаже. Парк KLCC внизу с фонтанами. Вечером — симфония фонтанов (бесплатно, каждый вечер).</div>
+</div>
+<div class="day-meta">
+<b>Башни:</b> €21 (RM 98 для иностранцев, смотровая 86-й этаж + Skybridge)
+<b>Мост Skybridge:</b> включён в билет
+<b>Время:</b> 2-3 часа (сеансы по времени, бронировать заранее)
+<b>⚠️ Понедельник:</b> башни закрыты — поэтому Петронас во вторник, а Бату Кейвз в понедельник
+<b>Парк KLCC:</b> бесплатно
+<b>Фонтаны:</b> бесплатно, вечером каждые 15 мин
+<b>🚇 Метро:</b> KLCC, линия KJL
+<b>🚶 ~5,000 шагов</b> (башни + парк + окрестности)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Petronas_Towers_at_Night_-_from_the_base_upwards.jpg/960px-Petronas_Towers_at_Night_-_from_the_base_upwards.jpg" alt="Петронас"><div class="g-cap">Петронас Тауэрс ночью</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Fountain_in_KLCC_Park_%281%29.jpg/960px-Fountain_in_KLCC_Park_%281%29.jpg" alt="Фонтан KLCC"><div class="g-cap">Фонтаны в парке KLCC</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Petronas_Panorama_II.jpg/960px-Petronas_Panorama_II.jpg" alt="Петронас днём"><div class="g-cap">Петронас Тауэрс днём</div></div>
+</div>
+</div>
+
+<div class="day-card">
+<div class="day-head">
+<h3>🕌 День KL4 — 7 октября (ср) — Чайнатаун + Малый Индийский</h3>
+<div class="desc">Утро: Чайнатаун (храм Сри Махариаммай, рынок Petaling). Полдень: Little India (лавки, специи, ткани). Вечер: фонтаны у Петронас.</div>
+</div>
+<div class="day-meta">
+<b>Чайнатаун:</b> бесплатно (рынок, храмы)
+<b>Little India:</b> бесплатно
+<b>Время:</b> полдня на оба района
+<b>🚇 Метро:</b> Pasar Seni (линия KJL/LRT), €0.50
+<b>Еда:</b> €8-12 (стритфуд в обоих районах — лучший в КЛ!)
+<b>🚶 ~6,000 шагов</b> (два района пешком, ~3км суммарно)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Central_Market%2C_Kuala_Lumpur.jpg/960px-Central_Market%2C_Kuala_Lumpur.jpg" alt="Pasar Seni"><div class="g-cap">Центральный рынок Pasar Seni</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Kuala_Lumpur_-_Kwai_Chai_Hong_%28Petaling_Street%29.jpg/960px-Kuala_Lumpur_-_Kwai_Chai_Hong_%28Petaling_Street%29.jpg" alt="Чайнатаун"><div class="g-cap">Kwai Chai Hong — Чайнатаун</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Kuala_Lumpur_Malaysia_National-Mosque-02.jpg/960px-Kuala_Lumpur_Malaysia_National-Mosque-02.jpg" alt="Малый Индийский"><div class="g-cap">Национальная мечеть (Masjid Negara)</div></div>
+</div>
+</div>
+
+<div class="day-card">
+<div class="day-head">
+<h3>🌿 День KL5 — 8 октября (чт) — Озёра + Исламский музей</h3>
+<div class="desc">Озёра (Lake Gardens) — ботанический парк, орнитологический парк, оленеферма. Рядом — Национальный музей исламского искусства (Islamic Arts Museum, лучший в Азии).</div>
+</div>
+<div class="day-meta">
+<b>Озёра:</b> бесплатно
+<b>Исламский музей:</b> €3 (RM 14)
+<b>Птичий парк (KL Bird Park):</b> €19 (RM 90 для иностранцев; малайзийцам RM 50), 9:00-17:30
+<b>Время:</b> полдня (утро, пока прохладно)
+<b>🚇 Метро:</b> до KL Sentral, затем автобус или такси €2-3
+<b>🚶 ~5,000 шагов</b> (парк ~2.5км по аллеям)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Kuala_Lumpur_Malaysia_National-Mosque-02.jpg/960px-Kuala_Lumpur_Malaysia_National-Mosque-02.jpg" alt="Мечеть"><div class="g-cap">Национальная мечеть</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Perdana_Botanical_Gardens_in_2023_01.jpg/960px-Perdana_Botanical_Gardens_in_2023_01.jpg" alt="Озёра"><div class="g-cap">Ботанический сад (Lake Gardens)</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Kuala_Lumpur_Bird_Park%2C_Colorful_parrots.jpg/960px-Kuala_Lumpur_Bird_Park%2C_Colorful_parrots.jpg" alt="Птичий парк"><div class="g-cap">KL Bird Park — попугаи</div></div>
+</div>
+</div>
+
+<div class="day-card">
+<div class="day-head">
+<h3>✈️ День KL6 — 9 октября (пт) — Куала-Лумпур → Пекин через Гуанчжоу</h3>
+<span class="tag tag-near">переезд</span>
+<div class="desc">Вылет раньше, чем в первой версии плана (было 10-е) — Малакка и день OFF из маршрута выпали, последняя ночь в КЛ теперь с 8 на 9. Чекаут утром, вещи в хранение отеля. Вылет CZ350 в 14:00, стыковка в Гуанчжоу ~1ч50мин, второй рейс CZ3161 до Пекина — но садится он не в Столичном аэропорту (PEK), а в Дасин (PKX) на другом конце города, прилёт 23:10.</div>
+</div>
+<div class="day-meta">
+<div class="flights">
+<div><b>✈️ 1-е плечо — CZ350 (China Southern)</b> KUL 14:00 → Гуанчжоу (CAN) 18:10, ~4ч10мин по расписанию (среднее фактическое ~3ч43мин) — подтверждено по данным Airportia на 17.09.2026, летает ежедневно</div>
+<div><b>✈️ 2-е плечо — CZ3161 (China Southern)</b> Гуанчжоу (CAN) 20:00 → Пекин Дасин (PKX) 23:10, по расписанию 3ч10мин. Стыковка 18:10→20:00 = 1ч50мин. Рейс ежедневный (7 дней в неделю), рейтинг пунктуальности 5/5 — подтверждено по данным Airportia на 17.09.2026 (проверено расписание за 8-17.09.2026, вылет стабильно ~20:00-20:49)</div>
+<div><b>⚠️ Дасин, не Столичный:</b> все дневные и вечерние рейсы CZ из Гуанчжоу в Пекин садятся в Дасин (PKX) — это хаб China Southern, ~46 км к югу от центра, а не в Столичный (PEK), где обычно ближе к отелям. Учтено в трансфере ниже</div>
+</div>
+<b>Транспорт до аэропорта:</b> KLIA Express €10 (30мин) + такси €2-3 до KL Sentral
+<b>Еда:</b> €10-15
+<b>🚶 ~3,000 шагов</b> (день перелёта)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/58_Kuala_Lumpur_night_skyline_with_Mont_Kiara.jpg/960px-58_Kuala_Lumpur_night_skyline_with_Mont_Kiara.jpg" alt="КЛ"><div class="g-cap">Прощай, Куала-Лумпур</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Kuala_Lumpur_Malaysia_Skyline-of-Kuala-Lumpur-Sentral-01.jpg/960px-Kuala_Lumpur_Malaysia_Skyline-of-Kuala-Lumpur-Sentral-01.jpg" alt="Сентрал"><div class="g-cap">KL Sentral — центр транспорта</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Petronas_Towers_at_Night_-_from_the_base_upwards.jpg/960px-Petronas_Towers_at_Night_-_from_the_base_upwards.jpg" alt="Петронас"><div class="g-cap">Петронас — до встречи, Китай!</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 1 КИТАЙ -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>✈️ День 1 — 9 октября (пт) — KUL → Пекин через Гуанчжоу</h3>
+<div class="desc">День перелёта. Вылет из Куала-Лумпура в 14:00 (CZ350), стыковка в Гуанчжоу 1ч50мин, второй рейс CZ3161 до Пекина, прилёт в аэропорт Дасин (PKX) в 23:10. Дасин — другой конец города от отеля, экспресс-метро к этому часу уже не ходит, поэтому такси и дороже, и дольше, чем закладывалось раньше. Заселение и спать: первый полный день в Пекине — буферный, завтра.</div>
+</div>
+<div class="day-meta">
+<b>✈️ 1-е плечо (подтверждено):</b> CZ350 KUL 14:00 → Гуанчжоу (CAN) 18:10, ~4ч 10мин по расписанию — Airportia, проверено 17.09.2026
+<b>✈️ 2-е плечо (подтверждено):</b> CZ3161 Гуанчжоу (CAN) 20:00 → Пекин Дасин (PKX) 23:10, 3ч10мин по расписанию, ежедневный рейс — Airportia, проверено 17.09.2026
+<b>⚠️ Аэропорт Дасин (PKX), не Столичный:</b> ~46 км к югу от центра. Экспресс-метро Daxing Airport Express ходит из аэропорта только до 23:00 — к прилёту в 23:10 уже не успеть
+<b>🚕 Из аэропорта:</b> такси/Didi до центра €28-36 (220-280 CNY), 60-90 мин, после 23:00 действует ночная наценка 20%
+<b>Отель:</b> Пекин, 5 ночей (9–14 октября) — варианты в разделе «Отели» внизу
+<b>Вечер:</b> дорога в отель и сон
+<b>Еда:</b> €25-30 (ужин + перекусы)
+<b>🚶 ~3,000 шагов</b> (аэропорт → такси → отель, лёгкая прогулка)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Gate_of_Heavenly_Peace%2C_Tiananmen_-_panoramio.jpg/960px-Gate_of_Heavenly_Peace%2C_Tiananmen_-_panoramio.jpg" alt="Тяньаньмэнь"><div class="g-cap">Врата Тяньаньмэнь</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e4/%E5%A4%A9%E5%AE%89%E9%97%A8%E5%A4%9C%E6%99%AF.jpg/960px-%E5%A4%A9%E5%AE%89%E9%97%A8%E5%A4%9C%E6%99%AF.jpg" alt="Тяньаньмэнь ночью"><div class="g-cap">Тяньаньмэнь ночью</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Beijing_Wangfujing_Yintai_in88_%2820220908154425%29.jpg/960px-Beijing_Wangfujing_Yintai_in88_%2820220908154425%29.jpg" alt="Ванфуцзинь"><div class="g-cap">Ванфуцзинь — улица шопинга</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 2 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🛌 День 2 — 10 октября (сб) — Пекин: буферный день</h3>
+<span class="tag tag-near">лёгкий</span>
+<div class="desc">Намеренно пустой день после долгого перелёта накануне — расплата за то, что вылет теперь на день раньше. Можно вообще не выходить из отеля, можно лёгкой прогулкой дойти до Ванфуцзин (шопинг-улица рядом с центром). Гугун — завтра, с запасом сил.</div>
+</div>
+<div class="day-meta">
+<b>Если день OFF:</b> поздний завтрак, отсыпной, спа/бассейн отеля
+<b>Ванфуцзин (по желанию):</b> бесплатно, шопинг-улица в 10-15 мин пешком от центра
+<b>Отель:</b> Пекин, 5 ночей (9–14 октября) — варианты в разделе «Отели» внизу
+<b>Еда:</b> €25-30
+<b>🚶 ~2,000–6,000 шагов</b>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 3 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🏯 День 3 — 11 октября (вс) — Пекин: Гугун + Угольный холм</h3>
+<span class="tag tag-must">must</span>
+<div class="desc">Главный день Пекина. Утро: Запретный город. Обед: лапша. Полдень: Угольный холм — вид на Гугун сверху, подъём короткий. Завтра — Стена, но она не такая тяжёлая, как Гугун, и открыта ежедневно (включая понедельник), так что можно два насыщенных дня подряд.</div>
+</div>
+<div class="day-meta">
+<b>Гугун:</b> €8 (60 CNY; бронь обязательна, по паспорту, бралась 4 октября в 20:00 по Пекину — за 7 дней, единым пулом. Билетов на текущий день музей не продаёт)
+<b>Цзиньшань (Угольный холм):</b> €1.3 (10 CNY)
+<b>Совет:</b> к Гугуну к 8:00 (открытие 8:30), чтобы не стоять в очереди
+<b>⚠️ Если билет не взялся:</b> сегодня становится ещё одним буферным днём, а Гугун переезжает на 13 или 14 октября — подробности в «Календаре броней»
+<b>Еда:</b> €25-30
+<b>🚇 Гугун:</b> Тяньаньмэнь Дун, линия 1/8
+<b>🚶 ~6,000 шагов</b> (Гугун ~2 км север-юг + холм)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/The_Forbidden_City_-_View_from_Coal_Hill.jpg/960px-The_Forbidden_City_-_View_from_Coal_Hill.jpg" alt="Вид с холма"><div class="g-cap">Вид на Гугун с Угольного холма</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Beijing_China_Forbidden-City-07.jpg/960px-Beijing_China_Forbidden-City-07.jpg" alt="Двор"><div class="g-cap">Двор и павильоны Гугуна</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Forbidden_City_-_Beijing_%283048773129%29.jpg/960px-Forbidden_City_-_Beijing_%283048773129%29.jpg" alt="Красные стены"><div class="g-cap">Красные стены и жёлтая черепица</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 4 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🏔️ День 4 — 12 октября (пн) — Пекин: Стена Мутяньюй</h3>
+<span class="tag tag-must">must</span>
+<div class="desc">Выезд 7:00. Канатка вверх + канатка вниз. Прогулка по гребню 1-1.5ч. Возврат к 15:00-16:00. Лучше всего сохранившийся участок стены — бастионы на гребне гор, хвойные леса на склонах. Понедельник Стене не помеха — она работает ежедневно 7:30-17:30, в отличие от Гугуна и Храма Неба.</div>
+</div>
+<div class="day-meta">
+<b>Стена:</b> €5.8 вход (45 CNY) + €1.9 шаттл внутри парка (15 CNY, обязателен) + €18 канатка туда-обратно (140 CNY) = €26
+<b>⚠️ Бронь:</b> можно взять <b>не ранее чем за 15 дней</b> (с 27 сентября), но и накануне тоже — на qunar видно «до 23:45 можно заказать на завтра». Дата фиксирована и не зависит от исхода Гугуна — можно бронировать в любой день после 27 сентября. Один билет на один паспорт на дату
+<b>🚌 Общественный:</b> автобус 916快 из Дунчжимэнь → Хуайжоу Бэйдацзе (12 CNY ≈ €1.5, 1.5-2ч), затем H23/H24 или такси (€6-10)
+<b>🚕 Такси (Didi):</b> туда-обратно €38-51 (1.5ч каждый путь)
+<b>Еда:</b> €25-30 (обед на стене — бери с собой)
+<b>Совет:</b> канатка в обе стороны = минимум ходьбы по ступенькам
+<b>🚶 ~3,000 шагов</b>
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/The_Mutianyu_section_of_the_Great_Wall_of_China.jpg/960px-The_Mutianyu_section_of_the_Great_Wall_of_China.jpg" alt="Стена"><div class="g-cap">Мутяньюй: стена на гребне гор</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Mutianyu_Great_Wall.png/960px-Mutianyu_Great_Wall.png" alt="Вид сверху"><div class="g-cap">Вид с канатной дороги</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/67016-The-Great-Wall%2C_Mutianyu.jpg/960px-67016-The-Great-Wall%2C_Mutianyu.jpg" alt="Осенью"><div class="g-cap">Осенний пейзаж стены</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 5 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🕊️ День 5 — 13 октября (вт) — Пекин: Храм Неба + Тяньаньмэнь</h3>
+<span class="tag tag-near">лёгкий</span>
+<div class="desc">Последний день в Пекине и намеренно лёгкий: завтра поезд. Храм Неба в десяти минутах от отеля, вечером — Тяньаньмэнь и хутоны. Это же запасная дата для Гугуна, если билет не взялся ни 11-го, ни 12-го.</div>
+</div>
+<div class="day-meta">
+<b>Храм Неба:</b> €4.4 (комбинированный билет 34 CNY; только парк — 15 CNY). Парк 6:00-22:00 — можно прийти к любому часу
+<b>✅ 13 октября — вторник:</b> главные постройки Храма Неба закрыты только по понедельникам, сегодня открыты. Комбинированный билет имеет смысл
+<b>🚇 Храм Неба:</b> Тяньтань Дунмэнь, линия 5 — от отеля пешком или одна остановка
+<b>Тяньаньмэнь вечером (по желанию):</b> бесплатно, метро Тяньаньмэнь Дун, линия 1
+<b>Хутоны Наньлуогусян (по желанию):</b> бесплатно, метро 6/8
+<b>Утка по-пекински:</b> €20-40 (Siji Minfu дешевле, Dadong дороже)
+<b>⚠️ Тяньаньмэнь:</b> бронь обязательна, окно 1-7 дней, то есть с 6 октября. Вход только по оригиналу паспорта
+<b>⚠️ Тяньаньмэнь сегодня вечером:</b> бронь обязательна, бралась заранее в окне 6-13 октября. Вход только по оригиналу паспорта
+<b>Еда:</b> €25-30
+<b>🚶 ~4,000 шагов</b> (парк Храма Неба ~1.5 км, остальное по желанию)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Temple_of_Heaven%2C_Beijing%2C_China_-_010_edit.jpg/960px-Temple_of_Heaven%2C_Beijing%2C_China_-_010_edit.jpg" alt="Храм Неба"><div class="g-cap">Зал Молитвы об урожае</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/The_Temple_of_Heaven%2C_Beijing%2C_%2850609381043%29.jpg/960px-The_Temple_of_Heaven%2C_Beijing%2C_%2850609381043%29.jpg" alt="Храм Неба вид"><div class="g-cap">Храм Неба в панораме</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/The_Temple_of_Heaven%2C_Beijing%2C_%2850610128566%29.jpg/960px-The_Temple_of_Heaven%2C_Beijing%2C_%2850610128566%29.jpg" alt="Храм Неба детали"><div class="g-cap">Крыша и детали Храма Неба</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/Gate_of_Heavenly_Peace%2C_Tiananmen_-_panoramio.jpg/960px-Gate_of_Heavenly_Peace%2C_Tiananmen_-_panoramio.jpg" alt="Тяньаньмэнь"><div class="g-cap">Врата Тяньаньмэнь</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Hutong_Jiemen_%28Snowyowls%29.jpg" alt="Хутоны"><div class="g-cap">Узкие переулки хутонов</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 6 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🚄 День 6 — 14 октября (ср) — Пекин → Шанхай</h3>
+<span class="tag tag-near">переезд</span>
+<div class="desc">Утро свободное (Ванфуцзин, чай, сборы). ~10:30 — на вокзал Пекин Южный. Прямой G-поезд до Шанхай Хунцяо, 4.5 часа, без пересадок. Вечер: Бунд + Луцзяцзуй (неон).</div>
+</div>
+<div class="day-meta">
+<b>Поезд Пекин→Шанхай:</b> €71-85 (553-662 CNY, второй класс), 4.5ч, <b>41 рейс в день</b> с 5:00 до 21:00. Продажи на 14 октября открываются за 30 дней, то есть с 14 сентября — окно уже открыто
+<b>Вокзал Пекин Южный:</b> метро линии 4 и 14, ~15 мин из центра
+<b>Отель:</b> Шанхай, 5 ночей (14–19 октября) — варианты в разделе «Отели» внизу
+<b>🚇 Хунцяо → центр:</b> метро линии 2/10, 40-50 мин
+<b>🚇 Бунд:</b> Нанкин Дун Лу, линия 2/10
+<b>Еда:</b> €25-30
+<b>🚶 ~3,000 шагов</b>
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Shanghai_-_Bund_at_Night.jpg/960px-Shanghai_-_Bund_at_Night.jpg" alt="Бунд"><div class="g-cap">Бунд вечером</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 7 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🛌 День 7 — 15 октября (чт) — Шанхай: день OFF после переезда</h3>
+<span class="tag tag-bonus">опционально</span>
+<div class="desc">Вчера был поезд, поэтому первый шанхайский день пустой. Ни одной брони, ни одного билета. Если захочется двигаться — Французский квартал пешком без маршрута: платаны, виллы 1920-х, кофейни.</div>
+</div>
+<div class="day-meta">
+<b>Если день OFF:</b> поздний завтрак, массаж €15-25, кофе на Бунде — и всё
+<b>Французский квартал (по желанию):</b> бесплатно; метро линия 1/10, Хэншань Лу
+<b>Тяньцзыфан (по желанию):</b> бесплатно, переулки с мастерскими и чаем; метро линия 9, Дапуцяо
+<b>Еда:</b> €20-30
+<b>🚶 ~1,000–6,000 шагов</b>
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Fountain_People%27s_Square_Shanghai.jpg/960px-Fountain_People%27s_Square_Shanghai.jpg" alt="Площадь Народа"><div class="g-cap">Площадь Народа — фонтаны</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 8 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🏯 День 8 — 16 октября (пт) — Шанхай: Сучжоу или свободный день</h3>
+<span class="tag tag-bonus">опционально</span>
+<div class="desc">Новый день — появился из-за того, что вылет из КЛ сдвинулся на день раньше, а освободившуюся ночь решили отдать Шанхаю. Можно съездить в Сучжоу (сады, каналы, 25-35 мин на поезде) или просто ничего не делать — оба варианта укладываются в один день без сборов и чемоданов.</div>
+</div>
+<div class="day-meta">
+<b>🏯 Сучжоу:</b> 25-35 мин на поезде от Хунцяо, <b>182 пары поездов в день</b> 6:00-22:00, 21-52 CNY = €2.7-6.7 в одну сторону. Сад Скромного чиновника <b>70 CNY (€9)</b>, низкий сезон уже действует (с 16 октября), 7:30-17:30
+<b>Или день OFF:</b> поздний завтрак, спа, прогулка без плана
+<b>🚇 До вокзала Хунцяо:</b> метро линии 2/10
+<b>Еда:</b> €20-30
+<b>🚶 ~2,000–8,000 шагов</b> (зависит от выбора)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Humble_Administrator%27s_Garden_Suzhou_November_2017_008.jpg/960px-Humble_Administrator%27s_Garden_Suzhou_November_2017_008.jpg" alt="Сад Сучжоу"><div class="g-cap">Сад Скромного чиновника, Сучжоу</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 9 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🏮 День 9 — 17 октября (сб) — Шанхай: Юйюань + Нанкинская</h3>
+<span class="tag tag-must">must</span>
+<div class="desc">Утро: Юйюань (сад 1559 г.) + базар — здесь же первые готовые китайские шмотки на стойках. День: Нанкинская дорога. Вечер: Храм Нефритового Будды, если останутся силы.</div>
+</div>
+<div class="day-meta">
+<b>Юйюань:</b> €5 (40 CNY в октябре; 09:00-16:30, последний вход 16:00)
+<b>Дин Тай Фун (dim sum):</b> €13
+<b>Храм Нефритового Будды (по желанию):</b> €2.6 (20 CNY)
+<b>🚇 Юйюань:</b> Юйюань Юань, линия 10/14
+<b>Еда:</b> €25-30
+<b>🚶 ~8,000 шагов</b> — самый нагруженный день Шанхая, поэтому завтра OFF
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Yuyuan_Garden_2.jpg/960px-Yuyuan_Garden_2.jpg" alt="Юйюань"><div class="g-cap">Сад Юйюань — павильон</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Yuyuan_Garden_4.jpg/960px-Yuyuan_Garden_4.jpg" alt="Базар"><div class="g-cap">Базар у Юйюань</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/Shanghai_Nanjing_Road_%282%29.jpg/960px-Shanghai_Nanjing_Road_%282%29.jpg" alt="Нанкинская"><div class="g-cap">Нанкинская дорога вечером</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 10 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>🛍️ День 10 — 18 октября (вс) — Шанхай: шопинг + резерв</h3>
+<span class="tag tag-bonus">опционально</span>
+<div class="desc">Последний полный день, и он твой. Половина дня на одежду и сувениры, вторая половина — или ещё магазины, или Сучжоу, или вода, или вообще ничего. Ничего бронировать заранее не нужно.</div>
+</div>
+<div class="day-meta">
+<b>👜 AP Plaza (рынок копий):</b> 2000-2002 Century Avenue, Пудун, ~30 мин на метро от Бунда — сумки, часы, аксессуары. Торг обязателен
+<b>🦪 Hongqiao International Pearl City:</b> жемчуг и украшения
+<b>🏬 Нанкинская дорога:</b> мейнстрим-бренды, 1.5 км пешеходной улицы
+<b>🎁 Тяньцзыфан:</b> сувениры, дизайн, чай — вход бесплатный
+<b>🏯 Сучжоу (если хочется выехать):</b> 25-35 мин на поезде, <b>182 пары поездов в день</b> 6:00-22:00, 21-52 CNY = €2.7-6.7 в одну сторону. Сад Скромного чиновника <b>70 CNY (€9)</b>, низкий сезон с 16 октября, 7:30-17:30
+<b>🚣 Чжуцзяцзяо:</b> 1ч на метро, линия 17, вход бесплатный, лодка €3
+<b>🎡 Дисней:</b> €61. Честно: 15 000 шагов и 10/10 накануне 16-часовой дороги домой
+<b>Еда:</b> €25-30
+<b>🚶 ~5,000–15,000 шагов</b> (зависит от выбора)
+<div class="src-note">Поезда Шанхай↔Сучжоу и цена сада: chinatravel.com / travelchinaguide.com / trip.com; проверено 15.09.2026</div>
+</div>
+<div class="tailor-box">
+<h4>Готовая китайская одежда — что бывает и где брать</h4>
+<p class="tailor-intro">Пошив на заказ из плана убран: ателье называют от 3-5 рабочих дней до двух недель, и обещание «успеем» проверить нечем — риск улететь без вещи и без денег. Берём готовое, мерим на месте, платим и уносим. Ниже — что искать глазами.</p>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/HK_Tsuen_Wan_Sunday_Hau_Tei_Square_8_Chinese_New_Year_Clothing.JPG/960px-HK_Tsuen_Wan_Sunday_Hau_Tei_Square_8_Chinese_New_Year_Clothing.JPG" alt="Тан-костюм"><div class="g-cap">Тан-костюм (唐装) — куртка с воротником-стойкой и узлами-пуговицами. Самое носибельное из «китайского»</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Zhongshan_suit_from_KC_Tailor.jpg/960px-Zhongshan_suit_from_KC_Tailor.jpg" alt="Френч Чжуншань"><div class="g-cap">Френч Чжуншань (中山装), «маоцзэдунка» — четыре кармана, глухой воротник. Строгий, не карнавальный</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/A_Male_Cheongsam_at_Traditional_Chinese_Clothing_lectures.jpg/960px-A_Male_Cheongsam_at_Traditional_Chinese_Clothing_lectures.jpg" alt="Чаншань"><div class="g-cap">Чаншань (长衫) — мужской длинный халат. На любителя, но встречается</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Qipao_1960-70%2C_printed_velvet._V%26A_Museum.jpg/960px-Qipao_1960-70%2C_printed_velvet._V%26A_Museum.jpg" alt="Ципао"><div class="g-cap">Ципао (旗袍) — женское платье, если брать в подарок</div></div>
+</div>
+<table class="tailor-table">
+<tr><th>Где</th><th>Что там</th><th>Цены и режим</th></tr>
+<tr><td><b>Базар у Юйюаня</b><br>рядом с садом, метро Юйюань Юань</td><td>Готовые стойки с ципао и «китайскими» куртками, шёлк, сувениры. Самое удобное — ты и так там 16-го</td><td>Готовое ципао <b>300-800 CNY = €39-103</b>. Торг ожидается; источники честно предупреждают, что честную цену тут выбить трудно</td></tr>
+<tr><td><b>Рынок Цыпу Лу</b> (七浦路)<br>метро Тяньтун Лу, линия 10 — выход практически в рынок</td><td>Крупнейший оптово-розничный рынок одежды Шанхая, ~5 этажей, мужское/женское/обувь. Не брендовый и не «копийный» — просто дёшево</td><td>Часы <b>6:00-17:00</b>. Торг обязателен, начинать с <b>половины</b> названной цены. Отзывы разделились: часть хвалит, часть пишет «не стоит того» — идти с настроем «повезёт так повезёт»</td></tr>
+<tr><td><b>Моллы на Хуайхай Лу и магазины на Чанлэ Лу</b></td><td>То же самое, но в магазине, без торга и без риска</td><td>Дороже рынка, зато фиксированный ценник и нормальная примерка</td></tr>
+</table>
+<p class="tailor-warn"><b>Чего я не нашёл — говорю прямо:</b> проверенной цены на <i>готовый</i> тан-костюм или френч Чжуншань в источниках нет. Подтверждённая цифра есть только по готовому ципао — 300-800 CNY. Всё остальное узнаётся на месте. <b>Правило на месте:</b> мерить обязательно (размеры китайские и меньше европейских), смотреть швы, торговаться от половины. Если вещь «на прикол» — не гнаться за шёлком, хлопок или синтетика выглядят так же, а стоят втрое меньше.</p>
+<div class="src-note">Цены и адреса: travelofchina.com, localshanghai.com, chinatravel.com, owlsourcing.com, liuhuamall.com, отзывы TripAdvisor; проверено 15.09.2026</div>
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Humble_Administrator%27s_Garden_Suzhou_November_2017_008.jpg/960px-Humble_Administrator%27s_Garden_Suzhou_November_2017_008.jpg" alt="Сад Сучжоу"><div class="g-cap">Сад Скромного чиновника, Сучжоу</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/1_zhujiajiao_ancient_water_town_2023.jpg/960px-1_zhujiajiao_ancient_water_town_2023.jpg" alt="Чжуцзяцзяо"><div class="g-cap">Чжуцзяцзяо — каналы и мосты</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Enchanted_Storybook_Castle_of_Shanghai_Disneyland.jpg/960px-Enchanted_Storybook_Castle_of_Shanghai_Disneyland.jpg" alt="Дисней"><div class="g-cap">Shanghai Disneyland — если всё-таки</div></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- ДЕНЬ 11 -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="day-card">
+<div class="day-head">
+<h3>✈️ День 11 — 19 октября (пн) — Шанхай → Черногория</h3>
+<div class="desc">На 19 октября <b>Тиват работает и стоит столько же, сколько Подгорица</b> — а это 20 минут до Будвы вместо часа двадцати. Все варианты Turkish — €652, разница только во времени вылета.</div>
+</div>
+<div class="day-meta">
+<div class="flights">
+<div><b>✈️ Вариант А (лучший)</b> Turkish, Пудун 22:25 → Стамбул → <b>Тиват 08:15</b> (20 окт). Всего 15ч 50мин, <b>€652</b> — весь день 19-го в Шанхае свободен, утром 20-го уже в Черногории</div>
+<div><b>✈️ Вариант Б</b> Turkish, Пудун 07:55 → Стамбул → <b>Тиват 16:40</b> тем же днём. Всего 14ч 45мин, <b>€652</b> — самый быстрый, но выезд в аэропорт ~05:00</div>
+<div><b>🛬 Подгорица за те же деньги</b> 22:25 → 08:40 (20 окт), 16ч 15мин, €652 · либо 07:55 → 19:55 тем же днём, 18ч, €652. Смысл только если нужен именно Подгорица</div>
+<div><b>💸 Дешевле, но длиннее</b> Emirates + Flydubai 00:05 → Тиват 13:30, 19ч 25мин, €499 (вылет в ночь с 18-го) · Qatar + Air Serbia 00:35 → Тиват 14:35, 20ч, 2 пересадки, €445</div>
+<div class="src-note">Цены: Google Flights, вылет 19 октября 2026; проверено 15.09.2026</div>
+</div>
+<b>🚇 Метро:</b> Line 2, €0.90-1.30 (40-50 мин)
+<b>🚕 Такси (Didi):</b> €20-30 (центр → PVG, ~40 км)
+<b>Еда:</b> €25-30 (завтрак + обед в аэропорту)
+<b>🚶 ~3,000 шагов</b> (отель → аэропорт, минимум)
+</div>
+<div class="gallery">
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Shanghai_Pudong_Airport_2024_%28cropped%29.jpg/960px-Shanghai_Pudong_Airport_2024_%28cropped%29.jpg" alt="Аэропорт"><div class="g-cap">Shanghai Pudong Airport</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/d/df/Pudong_Shanghai_November_2017_panorama.jpg/960px-Pudong_Shanghai_November_2017_panorama.jpg" alt="Пудонг"><div class="g-cap">Пудонг — прощальный вид</div></div>
+<div class="g-item" onclick="openModal(this)"><img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Shanghai_-_Bund_at_Night.jpg/960px-Shanghai_-_Bund_at_Night.jpg" alt="Бунд"><div class="g-cap">Бунд — до встречи, Шанхай!</div></div>
+</div>
+</div>
+
+<!-- ═══ САМОКАТЫ И ТАКСИ ═══ -->
+<h2>🛴 Самокаты и такси</h2>
+
+<div class="day-card">
+<div class="day-head">
+<h3>Электросамокаты / велосипеды (共享出行)</h3>
+<div class="desc">В Пекине и Шанхае полно самокатов по подписке. <b>HelloBike</b> (синие), <b>Meituan</b> (жёлтые), <b>Qingju</b> (зелёные, через Didi). Оплата: привязать Visa/MC к Alipay или WeChat Pay.</div>
+</div>
+<div class="day-meta">
+<b>Цена:</b> €0.20-0.30 за 30 мин
+<b>Как начать:</b> Alipay → поиск «HelloBike» → сканировать QR-код
+<b>Важно:</b> привязать паспорт и карту ЗАРАНЕЕ (за 1-2 дня до вылета)
+<b>Где нельзя:</b> запретные зоны (Тяньаньмэнь, CBD в Пекине) — штраф €6.4
+</div>
+</div>
+
+<div class="day-card">
+<div class="day-head">
+<h3>🚕 Где взять самокат, чтобы не идти пешком</h3>
+<div class="desc">Самокаты экономят 10-15 минут ходьбы на переходах. Вот где они реально полезны:</div>
+</div>
+<div class="day-meta">
+<b>День 2 (Пекин):</b> буферный день, от отеля до Ванфуцзин — 10-15 мин пешком, самокат = 5 мин
+<b>День 3 (Пекин):</b> от метро Тяньаньмэнь Дун до восточного входа Гугуна — 10 мин пешком или 3 мин на самокате
+<b>День 9 (Шанхай):</b> от Юйюань до Нанкинской дороги — 15 мин пешком, самокат = 5 мин
+<b>⚠️ Нельзя:</b> Тяньаньмэнь, парк Храма Неба, внутри Гугуна, аэропорты
+</div>
+</div>
+
+<div class="day-card">
+<div class="day-head">
+<h3>🚕 Такси (Didi) — основной транспорт</h3>
+<div class="desc"><b>Didi</b> — китайский Uber. Вызов за 30 секунд, оплата картой через приложение.</div>
+</div>
+<div class="day-meta">
+<b>Стоимость:</b> €0.25-0.40/km + подача €1.70
+<b>По городу:</b> €2-6
+<b>На расстояние:</b> €13-51 (аэропорт, Стена Мутяньюй туда-обратно)
+<b>Оплата:</b> привязать Visa/MC к Didi до вылета. Работает в 300+ городах
+<b>Альтернативы:</b> Yidao (易到), Caocao (曹操) — но Didi покрывает 90%
+</div>
+</div>
+
+<!-- ═══ ПОГОДА ═══ -->
+<h2>🌡️ Погода — чего ждать и что везти</h2>
+<div class="hotel-box">
+<p class="tailor-intro"><b>До поездки остался один день, поэтому ниже — и нормы за 30 лет, и фактический прогноз Open-Meteo на 9–19 октября, снятый 8 октября (см. 07-practical.md).</b> Нормы говорят, чего ждать обычно; прогноз — что будет в эти даты.</p>
+<table class="tailor-table">
+<tr><th>Где и когда</th><th>Днём</th><th>Ночью</th><th>Осадки за месяц</th><th>Влажность</th></tr>
+<tr><td><b>Куала-Лумпур</b><br>4–9 октября</td><td><b>33 °C</b></td><td>24 °C</td><td class="no">287 мм — самый мокрый месяц в году</td><td>81%</td></tr>
+<tr><td><b>Пекин</b><br>9–14 октября</td><td><b>19 °C</b></td><td class="warn">7 °C</td><td class="ok">34 мм — сухо</td><td>61%</td></tr>
+<tr><td><b>Шанхай</b><br>14–19 октября</td><td><b>24 °C</b></td><td>16 °C</td><td>51 мм</td><td>71%</td></tr>
+<tr><td><b>Черногория</b><br>прилёт 20 октября</td><td><b>22 °C</b></td><td>12 °C</td><td>97 мм</td><td>71%</td></tr>
+</table>
+<p class="tailor-warn"><b>Главный перепад — между КЛ и Пекином, и он огромный.</b> Ты вылетаешь из тридцатитрёхградусной бани с влажностью 81% и через десять часов выходишь в Пекине, где ночью +7 и сухо. Разница по ночной температуре — 17 градусов. Тёплые вещи должны лежать не в чемодане в багаже, а в ручной клади: прилёт 10-го в 22:55, и от аэропорта до отеля ты поедешь уже по холоду.
+<br><b>Дожди в Куала-Лумпуре — не «возможны», а норма.</b> 287 мм за месяц, октябрь там самый мокрый. Но льёт обычно во второй половине дня короткими сильными ливнями, а не весь день подряд — программа от этого не рушится, просто зонт нужен всегда. Бату-Кейвз и Чайнатаун лучше брать в первой половине дня.
+<br><b>Пекин сухой, и это хорошая новость.</b> 34 мм за месяц — почти в девять раз меньше, чем в КЛ. Шанс попасть под дождь на Стене низкий. Расплата — сухой воздух и ветер: губы и горло сохнут, вода с собой обязательна.
+<br><b>А вот риск, который нельзя игнорировать.</b> Пекин в октябре холодает рывками, а не плавно. 17 октября 2021 года температура в столичной обсерватории Наньцзяо упала до <b>−0,2 °C</b> — самое низкое значение для середины октября с 1969 года, за 52 года наблюдений. Это выброс, а не норма, но он показывает, на что способен пекинский октябрь. Поэтому на день Стены (13-го) — слои: футболка, флиска, ветрозащитная куртка. На гребне ветер сильнее, чем в городе.
+<br><b>Шанхай — самый комфортный отрезок:</b> 24 днём, 16 ночью. Ветер там заметный (побережье), вечером на Бунде продувает — лёгкая куртка пригодится.
+<br><b>Итого что везти:</b> на КЛ — лёгкое и быстросохнущее плюс зонт; на Китай — слои и ветровку; тёплое держать в ручной клади на перелёте 9 октября.</p>
+<div class="src-note">Климатические нормы: timeanddate.com — Куала-Лумпур (станция Sultan Abdul Aziz Shah-Subang, наблюдения 2012–2021), Пекин (станция Beijing Airport, 1992–2021), Шанхай (станция Hongqiao, 1992–2021), Подгорица (1992–2021) · рекорд −0,2 °C 17.10.2021: bjnews.com.cn, thepaper.cn, thecover.cn со ссылкой на Метеобюро Пекина · проверено 15.09.2026</div>
+</div>
+
+<!-- ═══ ИТОГО ═══ -->
+<h2>📅 Календарь броней — что и когда открывается</h2>
+<div class="hotel-box">
+<p class="tailor-intro">Три вещи в Китае без предварительной брони не работают вообще, и у каждой своё окно. Внимание: три окна Гугуна (4, 6, 7 октября в 20:00) уже прошли — первый шаг сегодня: проверить наличие билетов. Даты ниже посчитаны от дней визита в этом маршруте. Куала-Лумпур и Пекин в одном часовом поясе (UTC+8), пересчитывать время не нужно.</p>
+<table class="tailor-table">
+<tr><th>Когда бронировать</th><th>Что</th><th>Правило</th><th>Где ты в этот день</th></tr>
+<tr><td><b>29 сентября</b><br>(открыто)</td><td>Поезд Пекин → Шанхай на 14 октября</td><td>Продажи открываются за 15 дней — окно открыто с 29 сентября. 54 рейса в день, так что не горит, но дешёвые места уходят первыми</td><td>Дома</td></tr>
+<tr><td><b>27 сентября</b><br>(или позже)</td><td>Стена Мутяньюй на 12 октября</td><td>Окно открывается <b>не ранее чем за 15 дней</b> (с 27 сентября), но брать можно и накануне — qunar показывает «до 23:45 можно заказать на завтра». Дата фиксирована (день 4, понедельник — Гугун и Храм Неба в этот день всё равно закрыты) и не зависит от исхода Гугуна. Один билет на один паспорт на дату</td><td>Куала-Лумпур</td></tr>
+<tr><td><b>6 октября</b></td><td>Тяньаньмэнь на 13 октября (день 5)</td><td>Бронь <b>обязательна с 2021 года</b>, прохода без неё нет ни для кого. Окно — от 7 до 1 дня до визита, через мини-программу WeChat, вход только по оригиналу паспорта</td><td>Куала-Лумпур</td></tr>
+<tr><td><b>4 октября, ровно 20:00</b></td><td>Гугун на 11 октября — <b>попытка 1</b></td><td class="no">Самое жёсткое. Билеты на седьмой день выбрасываются <b>единым пулом в 20:00 по Пекину</b>, и на текущий день музей не продаёт билеты вообще. Будильник на 19:58, данные паспорта забить в профиль заранее</td><td class="warn">Перелёт Коломбо → Куала-Лумпур. Прилёт днём, к 20:00 ты уже в отеле — но интернет проверить заранее</td></tr>
+<tr><td><b>6 октября, ровно 20:00</b></td><td>Гугун на 13 октября — <b>попытка 2</b></td><td>Только если 4-го не взялось. Тогда 11-е (день 3) остаётся ещё одним буферным днём, а Храм Неба + Тяньаньмэнь (день 5) переезжают на 11-е, освобождая 13-е под Гугун</td><td>Куала-Лумпур</td></tr>
+<tr><td><b>7 октября, ровно 20:00</b></td><td>Гугун на 14 октября — <b>попытка 3</b></td><td>Последняя. Гугун с утра, поезд в Шанхай — тем же вечером (рейсы до 21:00, время есть). Если и эта попытка мимо — Гугуна в этой поездке нет</td><td>Куала-Лумпур</td></tr>
+<tr><td><b>1–4 октября</b></td><td>MDAC — цифровая карта прибытия в Малайзию</td><td>Не раньше чем за 3 дня до прилёта, бесплатно, обязательна</td><td>Шри-Ланка</td></tr>
+</table>
+<p class="tailor-warn"><b>Почему это вынесено отдельно.</b> В первой версии отчёта у меня стояло «забронировать Гугун накануне» — это была ошибка: при окне в 7 дней и едином выбросе квоты накануне не остаётся ничего. Теперь каждая бронь привязана к конкретной дате, посчитанной назад от дня визита.
+<br><b>Почему порядок дней именно такой.</b> Гугун — единственное, у чего окно жёсткое (ровно 7 дней, единый выброс в 20:00, на текущий день не продают). У Стены окно мягкое: не раньше чем за 15 дней, но и накануне можно, поэтому её дата (12 октября) зафиксирована и ни от чего не зависит — заодно это понедельник, когда всё равно закрыты и Гугун, и главные постройки Храма Неба, а Стена работает ежедневно.
+<br><b>Три попытки Гугуна, лесенкой.</b> 4 октября целимся в 11-е (день 3, сразу после буферного дня). Не взялось — 6 октября целимся в 13-е, а 11-е превращается в ещё один буферный день, Храм Неба+Тяньаньмэнь съезжают на 11-е. Опять не взялось — 7 октября целимся в 14-е, тогда Гугун встаёт перед вечерним поездом в Шанхай.</p>
+<div class="src-note">Гугун (7 дней, 20:00, единый пул, без продажи на текущий день): travelchinaguide.com, gochinafreely.com, bj.bendibao.com, sina.cn · Мутяньюй (15 дней, 1 билет на паспорт): lyriktrip.com, wanderinchina.com со ссылкой на уведомление парка · Тяньаньмэнь (обязательна с 15.12.2021, окно 1-7 дней, WeChat, паспорт): getyourguide.com, local-travelling-china.com, trvlogue.com · проверено 15.09.2026</div>
+</div>
+
+<h2>💰 Полная смета поездки</h2>
+
+<div class="verdict">
+<table class="budget-table">
+<tr><th>Статья</th><th>Сумма</th><th>Примечание</th></tr>
+<tr><td>✈️ Перелёты</td><td>€951–1 260</td><td>CMB→KUL €153–285 + KUL→CAN→Пекин Дасин €145–323 (расписание обоих плеч — CZ350 + CZ3161 — подтверждено; итоговую цену проверить невозможно: Google Flights/Kayak на эту дату отдают страницу без цен без JS-рендера) + PVG→IST→TIV €652 (Turkish)</td></tr>
+<tr><td>🚄 Поезда</td><td>€71–85</td><td>Пекин→Шанхай прямой G-поезд, 4.5ч (553-662 CNY, второй класс)</td></tr>
+<tr><td>🏨 Отели (15 ночей)</td><td>€416–738</td><td>Пекин и Шанхай — живые цены Booking на 08.10.2026: Пекин Hyde Courtyard €237 (первый выбор, остаток 1 номер), Шанхай Xihe €253 (первый выбор, +€3 к лимиту). Проверено живьём 08.10.2026, файл 03-hotels.md</td></tr>
+<tr><td>🎟️ Билеты (Китай)</td><td>€62</td><td>Гугун €8 + Цзиньшань €0.3 (2 CNY в октябре) + Храм Неба €4.5 + Стена €26.6 + Юйюань €5.3 + Сучжоу (сад) €10.6 (80 CNY в октябре). Опционально 18-го: Чжуцзяцзяо €8 / Дисней €61</td></tr>
+<tr><td>🎟️ Билеты (КЛ)</td><td>€43</td><td>Петронас €21 (RM 98) + Исламский музей €3 (RM 14) + Птичий парк €19 (RM 90)</td></tr>
+<tr><td>🍽️ Еда (16 дней)</td><td>€310–390</td><td>КЛ 6×€10-15 + Китай 10×€25-30</td></tr>
+<tr><td>🚕 Транспорт</td><td>€112–140</td><td>КЛ €3-5/день + Китай €8-10/день + аэропорты</td></tr>
+<tr><td>🛡️ Страховка</td><td>€47–66</td><td>16 дней</td></tr>
+<tr><td>📱 eSIM</td><td>€15–20</td><td>Malaysia + China SIM</td></tr>
+<tr><td>🛴 Самокаты</td><td>€5–10</td><td>только Китай</td></tr>
+<tr><td>💸 Запас</td><td>€100–150</td><td>непредвиденные расходы, чаевые, подарки</td></tr>
+<tr class="total"><td><b>ИТОГО</b></td><td><b>€2,131 – 2,964</b></td><td>Без Диснея. Сучжоу включён (день 8 или день 10). Отели перепроверены живьём 08.10.2026</td></tr>
+</table>
+<p class="mini">Даты: 4–19 октября 2026. Цены на входные билеты и транспорт проверены 14.09.2026, авиабилеты и отели — оценка. Безвиз Китай 30 дней для россиян (продлён до 31.12.2027). Безвиз Малайзия 30 дней. Курс на 14.09.2026: 1 CNY = €0.1331 (open.er-api.com, 08.10.2026). Оплата: AliPay/WeChat Pay (Китай), Visa/MC (КЛ).
+<br><br>⚠️ Важно: все брони с датами — в разделе «Календарь броней». Коротко: Гугун целится на 11 октября и берётся 4 октября ровно в 20:00 по Пекину, с запасными заходами 6 и 7 октября; Стена на 12 октября — дата фиксирована, бронь открывается с 27 сентября; Тяньаньмэнь на 13 октября — с 6 октября. Гугун закрыт по понедельникам. Поезда — за 15 дней (окно на 14 октября открыто с 29 сентября). MDAC для Малайзии — за 3 дня до прилёта. Петронас закрыт по понедельникам. Привязка карт к Alipay/WeChat/Didi — до вылета.
+<br><br>✈️ Обратный маршрут: Шанхай Пудун → Стамбул → <b>Тиват</b> на Turkish, <b>€652</b> на 19 октября 2026. Вечерний вылет 22:25 → Тиват 08:15 (20 окт), 15ч 50мин; утренний 07:55 → Тиват 16:40 тем же днём, 14ч 45мин. Подгорица — та же цена, но на 25-35 мин дольше и в часе двадцати от Будвы вместо двадцати минут. Дешевле: Emirates+Flydubai €499 (19ч 25мин) или Qatar+Air Serbia €445 (20ч, две пересадки).</p>
+</div>
+
+<h2>🏨 Отели — где бронировать</h2>
+<div class="hotel-box">
+<div class="hotel-row"><div class="hotel-head"><b>Куала-Лумпур</b> <span class="hotel-meta">4–9 октября, 5 ноч., 1 гость</span></div><table class="tailor-table"><tr><th>Отель</th><th>Оценка</th><th>Цена за весь период</th></tr><tr><td><a href="https://www.booking.com/hotel/my/golden-palace-kuala-lumpur1.ru.html"><b>GOLDEN PALACE</b></a><br><span class="hotel-note">Самое дешёвое из приличного в выдаче</span></td><td>8,6</td><td><b>≈€82</b> за 5 ноч.<br>≈€16/ночь</td></tr><tr><td><a href="https://www.booking.com/hotel/my/empire-bukit-bintang.ru.html"><b>Empire Bukit Bintang</b></a><br><span class="hotel-note">В Букит-Бинтанге, то есть там, где по плану и живёшь</span></td><td>10</td><td><b>≈€123</b> за 5 ноч.<br>≈€25/ночь</td></tr><tr><td><a href="https://www.booking.com/hotel/my/imperial.ru.html"><b>Hotel Imperial</b></a><br><span class="hotel-note">Запас по комфорту, если первые два не понравятся</span></td><td>8,3</td><td><b>≈€168</b> за 5 ноч.<br>≈€34/ночь</td></tr></table><div class="hotel-links"><a href="https://www.booking.com/searchresults.ru.html?ss=Kuala+Lumpur&checkin=2026-10-04&checkout=2026-10-09&group_adults=1&no_rooms=1&group_children=0&lang=ru">открыть всю выдачу Booking с этими датами</a></div><div class="src-note">Цены за 5 ноч. — пересчёт из живых цен Booking за 6 ноч. (15.09.2026), не перепроверено на новых датах</div></div>
+<div class="hotel-row"><div class="hotel-head"><b>Пекин</b> <span class="hotel-meta">9–14 октября, 5 ноч., 1 гость</span></div><table class="tailor-table"><tr><th>Отель</th><th>Оценка</th><th>Цена за весь период</th></tr><tr><td><a href="https://www.booking.com/hotel/cn/7days-inn-beijing-chaoyangmen.ru.html"><b>7Days Inn Premium Beijing Chaoyangmen</b></a><br><span class="hotel-note">Дешевле всех при рейтинге 8+</span></td><td>8,5</td><td><b>€214</b> за 5 ноч.<br>≈€43/ночь</td></tr><tr><td><a href="https://www.booking.com/hotel/cn/yi-ting-bei-jing-tian-tan-jiu-dian-bei-jing.ru.html"><b>Hanting Hotel Beijing Temple of Heaven</b></a><br><span class="hotel-note">У Храма Неба — ровно там, где проходит лёгкий день 13-го</span></td><td>8,3</td><td><b>€272</b> за 5 ноч.<br>≈€54/ночь</td></tr><tr><td><a href="https://www.booking.com/hotel/cn/qiuguo-shengqi-beijing-tiananmen-square-qianmen-subway-station-branch.ru.html"><b>Qiuguo Shengqi Hotel, Tiananmen Qianmen</b></a><br><span class="hotel-note">У Цяньмэнь и Тяньаньмэнь — ближе всего к Гугуну</span></td><td>8,5</td><td><b>€294</b> за 5 ноч.<br>≈€59/ночь</td></tr></table><div class="hotel-links"><a href="https://www.booking.com/searchresults.ru.html?ss=Beijing&checkin=2026-10-09&checkout=2026-10-14&group_adults=1&no_rooms=1&group_children=0&lang=ru">открыть всю выдачу Booking с этими датами</a></div></div>
+<div class="hotel-row"><div class="hotel-head"><b>Шанхай</b> <span class="hotel-meta">14–19 октября, 5 ноч., 1 гость</span></div><table class="tailor-table"><tr><th>Отель</th><th>Оценка</th><th>Цена за весь период</th></tr><tr><td><a href="https://www.booking.com/hotel/cn/iforest-people-square-grand-theatre.ru.html"><b>Iforest People Square Grand Theatre</b></a><br><span class="hotel-note">Площадь Народа, рейтинг 9,0 — лучшее соотношение в выдаче</span></td><td>9,0</td><td><b>≈€120</b> за 5 ноч.<br>≈€24/ночь</td></tr><tr><td><a href="https://www.booking.com/hotel/cn/jinglai-shanghai-south-bund-xintiandi.ru.html"><b>Jinglai Hotel Shanghai South Bund Xintiandi</b></a><br><span class="hotel-note">Южный Бунд, рядом Синьтяньди</span></td><td>8,7</td><td><b>≈€254</b> за 5 ноч.<br>≈€51/ночь</td></tr><tr><td><a href="https://www.booking.com/hotel/cn/shanghai-fish-inn-east-nanjing-road.ru.html"><b>Shanghai Fish Inn East Nanjing Road</b></a><br><span class="hotel-note">На Нанкинской, пешком до Бунда и Юйюаня</span></td><td>8,3</td><td><b>≈€276</b> за 5 ноч.<br>≈€55/ночь</td></tr></table><div class="hotel-links"><a href="https://www.booking.com/searchresults.ru.html?ss=Shanghai&checkin=2026-10-14&checkout=2026-10-19&group_adults=1&no_rooms=1&group_children=0&lang=ru">открыть всю выдачу Booking с этими датами</a></div><div class="src-note">Цены за 5 ноч. — пересчёт из живых цен Booking за 4 ноч. (15.09.2026), не перепроверено на новых датах</div></div>
+<p class="load-note"><b>Откуда эти цены и отели.</b> Это не подбор по обзорам — это живая выдача Booking, запрошенная 15.09.2026 ровно на твои даты, на одного гостя, с фильтром «только отели, оценка 8+», отсортированная по цене. Название, оценка, цена и ссылка взяты из одной и той же карточки результата, поэтому все три отеля в каждом городе на эти даты были доступны в момент проверки.
+<br><b>Что это значит на практике:</b> цена указана за весь период, а не за ночь — Booking показывает именно так. Наличие мест меняется каждый день, так что к моменту брони что-то может уйти; ссылка «открыть всю выдачу» даёт актуальный список тем же фильтром.
+<br><b>Почему прошлые варианты выкинуты:</b> я предлагал их по обзорам, не проверив доступность на даты — в двух не было мест, третий Booking вообще не находил по названию. Это была моя ошибка; теперь в списке только то, что выдал сам Booking.</p>
+</div>
+
+<h2>Источники</h2>
+<p class="src">Проверено 14–15.09.2026, обновлено 08.10.2026 (ветка city/china):<br>
+Рейсы CZ350/CZ3161 ежедневные — Flightradar24, 08.10.2026 · окно продаж 12306 — 15 дней (Trip.com, 08.10.2026) · отели — живые страницы Booking, 08.10.2026 · точки — bookingticket.dpm.org.cn, mutianyugreatwall.com, 08.10.2026 · курс 1 CNY = €0.133099 — open.er-api.com, 08.10.2026 · прогноз — Open-Meteo, 08.10.2026<br>Проверено 14–15.09.2026:<br>
+Цены и расписания перелётов (CMB→KUL 4.10.2026, PVG→TGD/TIV 19.10.2026, евро, эконом, 1 взрослый): <a href="https://www.google.com/travel/flights">Google Flights</a> · расписания и номера рейсов: <a href="https://www.flightsfrom.com/CMB-KUL">flightsfrom.com</a>, <a href="https://info.flightmapper.net/flight/AirAsia_AK_44">flightmapper.net</a>, <a href="https://www.kayak.com/flight-routes/Kuala-Lumpur-Intl-KUL/Beijing-Capital-Intl-PEK">kayak.com</a> · KUL→Гуанчжоу→Пекин, China Southern: CZ350 14:00→18:10 CAN + CZ3161 20:00→23:10 Пекин Дасин (PKX), оба рейса ежедневные: <a href="https://www.airportia.com/flights/cz350/kuala-lumpur/guangzhou/">airportia.com/cz350</a>, <a href="https://www.airportia.com/flights/cz3161/guangzhou/beijing/">airportia.com/cz3161</a>, проверено 17.09.2026 — итоговую цену проверить невозможно: Google Flights и Kayak на дату 9.10.2026 отдают страницу без цен (рендер через JS, статический фетч видит только «Loading results»), проверено 17.09.2026 · Дасин↔центр: такси 220-280 CNY / 60-90 мин, экспресс-метро до 23:00: <a href="https://www.chinadiscovery.com/china-trains/schedules/daxing-airport-to-beijing.html">chinadiscovery.com</a>, проверено 17.09.2026<br>
+Поезд Пекин→Шанхай (4.5ч, 41 рейс в день, 553-662 CNY второй класс): <a href="https://airconnect.live/en/destinations/china-hsr-beijing-shanghai">airconnect.live</a>, <a href="https://www.chinatravel.com/china-trains/beijing-shanghai-train">chinatravel.com</a> ·
+Поезда Шанхай↔Сучжоу (25-35 мин, 182 пары в день, 21-52 CNY): <a href="https://www.chinatravel.com/shanghai/how-to-travel-from-shanghai-to-suzhou">chinatravel.com</a>, <a href="https://www.travelchinaguide.com/cityguides/shanghai/suzhou.htm">travelchinaguide.com</a> ·
+Сад Скромного чиновника, Сучжоу (80 CNY в октябре — busy season, 7:30-17:30): <a href="https://ru.trip.com/guide/activity/%D1%81%D0%B0%D0%B4%D1%8B-%D1%81%D1%83%D1%87%D0%B6%D0%BE%D1%83-%D0%BA%D0%B0%D0%BA%D0%BE%D0%B9-%D0%B2%D1%8B%D0%B1%D1%80%D0%B0%D1%82%D1%8C.html">trip.com</a> ·
+Готовая одежда в Шанхае (ципао 300-800 CNY, рынок Цыпу Лу 6:00-17:00, метро Тяньтун Лу линия 10, торг от половины цены): <a href="https://www.travelofchina.com/best-things-to-buy-in-shanghai-2025-top-10-souvenir-picks/">travelofchina.com</a>, <a href="https://localshanghai.com/qipu-road-market-shanghai/">localshanghai.com</a>, <a href="https://www.chinatravel.com/shanghai/top-street-markets">chinatravel.com</a>, <a href="https://owlsourcing.com/shanghai-wholesale-markets/">owlsourcing.com</a> ·
+Стена Мутяньюй (45 + 15 + 140 CNY): <a href="https://dragontrail.cc/travel-guide/great-wall-guide/mutianyu/tickets">dragontrail.cc</a> ·
+Запретный город (60 CNY, бронь за 7 дней): <a href="https://www.travelchinaguide.com/cityguides/beijing/forbidden.htm">travelchinaguide.com</a>, бронь <a href="https://bookingticket.dpm.org.cn/">bookingticket.dpm.org.cn</a> ·
+Храм Неба (парк 15 / комбо 34 CNY): <a href="https://tiantanpark.cn/en/index.html">tiantanpark.cn</a> ·
+Юйюань (40 CNY, 9:00-16:30): <a href="https://www.travelchinaguide.com/attraction/shanghai/yuyuan_garden.htm">travelchinaguide.com</a> ·
+Чжуцзяцзяо (вход в городок бесплатный): <a href="https://www.chinahighlights.com/shanghai/attraction/zhujiajiao-water-town.htm">chinahighlights.com</a> ·
+Безвиз РФ→Китай до 31.12.2027: <a href="https://www.chinadiscovery.com/chinese-visa/how-much-is-a-chinese-visa.html">chinadiscovery.com</a> ·
+Безвиз РФ→Малайзия 30 дней: <a href="https://entryconditions.com/russia/malaysia">entryconditions.com</a> ·
+MDAC (обязательна, бесплатно): <a href="https://imigresen-online.imi.gov.my/mdac/main">imi.gov.my</a> ·
+Петронас RM 98, закрыт по понедельникам: <a href="https://www.tours-malaysia.com/3-days-in-malaysia/">tours-malaysia.com</a> ·
+Птичий парк RM 90: <a href="https://www.klbirdpark.com/plan-your-visit/">klbirdpark.com</a> ·
+Исламский музей RM 14: <a href="https://iamm.org.my/">iamm.org.my</a> ·
+Шеринг велосипедов для иностранцев (паспорт + Alipay): <a href="https://localshanghai.com/shanghai-shared-bike-foreigner-meituan-hellobike/">localshanghai.com</a> ·
+Курс на 14.09.2026: <a href="https://open.er-api.com/v6/latest/EUR">open.er-api.com</a>
+</p>
+
+</div>
+
+<!-- modal -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+<button class="modal-close" onclick="closeModal(event)">✕</button>
+<button class="modal-nav prev" onclick="navModal(event,-1)">‹</button>
+<button class="modal-nav next" onclick="navModal(event,1)">›</button>
+<div class="modal-box"><img id="modal-img" src="" alt=""></div>
+<div class="modal-counter" id="modal-counter"></div>
+</div>
+
+<script>
+let modalImages=[], modalIdx=0;
+function openModal(el){
+ const gal=el.closest('.gallery');
+ modalImages=[...gal.querySelectorAll('.g-item img')].map(i=>i.src);
+ modalIdx=[...gal.querySelectorAll('.g-item')].indexOf(el);
+ document.getElementById('modal-img').src=modalImages[modalIdx];
+ document.getElementById('modal').classList.add('active');
+ updateCounter();
+ document.body.style.overflow='hidden';
+}
+function closeModal(e){
+ if(e.target===document.getElementById('modal')||e.target.classList.contains('modal-close')){
+ document.getElementById('modal').classList.remove('active');
+ document.body.style.overflow='';
+ }
+}
+function navModal(e,dir){
+ e.stopPropagation();
+ modalIdx=(modalIdx+dir+modalImages.length)%modalImages.length;
+ document.getElementById('modal-img').src=modalImages[modalIdx];
+ updateCounter();
+}
+function updateCounter(){
+ document.getElementById('modal-counter').textContent=(modalIdx+1)+' / '+modalImages.length;
+}
+document.addEventListener('keydown',function(e){
+ if(!document.getElementById('modal').classList.contains('active'))return;
+ if(e.key==='Escape')document.getElementById('modal').classList.remove('active'),document.body.style.overflow='';
+ if(e.key==='ArrowLeft')navModal(e,-1);
+ if(e.key==='ArrowRight')navModal(e,1);
+});
+</script>
 </body></html>
